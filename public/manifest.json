@@ -1,0 +1,30 @@
+{
+  "short_name": "Converter",
+  "name": "Simple Currency Converter",
+  "description": "A beautiful, fluid, dark-mode currency converter that works instantly offline.",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#060913",
+  "theme_color": "#060913",
+  "display": "standalone",
+  "orientation": "portrait"
+}
