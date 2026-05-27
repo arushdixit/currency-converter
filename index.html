@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="https://flagcdn.com/w40/ae.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
   <!-- SEO and Meta Tags -->
@@ -38,10 +38,45 @@
       <header class="app-header">
         <div class="logo-area">
           <div class="logo-glow"></div>
-          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" width="28" height="28">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="28" height="28">
+            <defs>
+              <linearGradient id="header-logo-grad-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#22d3ee" />
+                <stop offset="100%" stop-color="#06b6d4" />
+              </linearGradient>
+              <linearGradient id="header-logo-grad-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#c084fc" />
+                <stop offset="100%" stop-color="#8b5cf6" />
+              </linearGradient>
+            </defs>
+            
+            <!-- Orbiting Outer Exchange Loop -->
+            <!-- Top Right Arc -->
+            <path d="M 6 16 A 10 10 0 0 1 24.5 9.5" fill="none" stroke="url(#header-logo-grad-cyan)" stroke-width="2" stroke-linecap="round" />
+            <path d="M 20.5 9.5 H 24.5 V 13.5" fill="none" stroke="url(#header-logo-grad-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            
+            <!-- Bottom Left Arc -->
+            <path d="M 26 16 A 10 10 0 0 1 7.5 22.5" fill="none" stroke="url(#header-logo-grad-purple)" stroke-width="2" stroke-linecap="round" />
+            <path d="M 11.5 22.5 H 7.5 V 18.5" fill="none" stroke="url(#header-logo-grad-purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            
+            <!-- Split Center Circular Currency Shield -->
+            <g transform="rotate(-45, 16, 16)">
+              <!-- Top-Right Half (Cyan) -->
+              <path d="M 8.5 15 A 7.5 7.5 0 0 1 23.5 15 Z" fill="url(#header-logo-grad-cyan)" />
+              <!-- Bottom-Left Half (Purple) -->
+              <path d="M 23.5 17 A 7.5 7.5 0 0 1 8.5 17 Z" fill="url(#header-logo-grad-purple)" />
+            </g>
+            
+            <!-- Upright Currency Glyphs in Center -->
+            <!-- Dollar Glyph ($) -->
+            <path d="M 19 9 V 15.5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none" />
+            <path d="M 17.2 10.8 C 17.2 10 17.8 9.5 18.6 9.5 C 19.4 9.5 20 10 20 10.8 C 20 11.6 19.4 12 18.6 12.2 C 17.8 12.4 17.2 12.8 17.2 13.6 C 17.2 14.4 17.8 14.9 18.6 14.9 C 19.4 14.9 20 14.4 20 13.6" 
+                  stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                  
+            <!-- Euro Glyph (€) -->
+            <path d="M 15 17.8 A 2.2 2.2 0 1 0 15 21.2" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none" />
+            <path d="M 12 19 H 14.5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" />
+            <path d="M 12 20 H 14.5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" />
           </svg>
           <h1>Converter</h1>
         </div>
