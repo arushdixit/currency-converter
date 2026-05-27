@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="https://flagcdn.com/w40/ae.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!-- SEO and Meta Tags -->
+  <title>Currency Converter - Premium Smart FX Converter</title>
+  <meta name="description"
+    content="A beautiful, fluid, dark-mode currency converter with a custom in-app keypad, real-time rates auto-updates, and advanced instant search." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Core Application Stylesheet -->
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+
+<body>
+  <div id="app">
+    <!-- Main Converter Container -->
+    <main class="converter-card" aria-label="Currency Converter Dashboard">
+
+      <!-- App Header -->
+      <header class="app-header">
+        <div class="logo-area">
+          <div class="logo-glow"></div>
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" width="28" height="28">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h1>Converter</h1>
+        </div>
+
+        <div class="sync-status">
+          <span id="lastUpdatedText" class="update-time">Loading rates...</span>
+          <button id="refreshBtn" class="refresh-button" aria-label="Refresh exchange rates">
+            <svg class="refresh-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" width="15" height="15">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89l-2.616 2.615" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Currency Rows Table Container -->
+      <section class="currency-rows-container" aria-label="Currencies List">
+        <!-- Five currency rows will be fully managed by JavaScript, pre-configured structure below for zero CLS -->
+        <div class="currency-rows" id="currencyRowsList">
+          <!-- AED Row (Default 0) -->
+          <div class="currency-row" id="row-0" data-index="0">
+            <button class="currency-selector" data-index="0" aria-label="Change AED currency">
+              <div class="selector-content-left">
+                <img class="currency-flag" src="https://flagcdn.com/w40/ae.png" alt="UAE flag" />
+                <span class="currency-code">AED</span>
+              </div>
+              <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                width="14" height="14">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div class="input-wrapper">
+              <input type="text" class="currency-input" id="input-0" data-index="0" placeholder="0.00" inputmode="none"
+                autocomplete="off" />
+              <button class="clear-input-btn" data-index="0" aria-label="Clear value">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
+                  <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- INR Row (Default 1) -->
+          <div class="currency-row" id="row-1" data-index="1">
+            <button class="currency-selector" data-index="1" aria-label="Change INR currency">
+              <div class="selector-content-left">
+                <img class="currency-flag" src="https://flagcdn.com/w40/in.png" alt="India flag" />
+                <span class="currency-code">INR</span>
+              </div>
+              <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                width="14" height="14">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div class="input-wrapper">
+              <input type="text" class="currency-input" id="input-1" data-index="1" placeholder="0.00" inputmode="none"
+                autocomplete="off" />
+              <button class="clear-input-btn" data-index="1" aria-label="Clear value">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
+                  <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- USD Row (Default 2) -->
+          <div class="currency-row" id="row-2" data-index="2">
+            <button class="currency-selector" data-index="2" aria-label="Change USD currency">
+              <div class="selector-content-left">
+                <img class="currency-flag" src="https://flagcdn.com/w40/us.png" alt="United States flag" />
+                <span class="currency-code">USD</span>
+              </div>
+              <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                width="14" height="14">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div class="input-wrapper">
+              <input type="text" class="currency-input" id="input-2" data-index="2" placeholder="0.00" inputmode="none"
+                autocomplete="off" />
+              <button class="clear-input-btn" data-index="2" aria-label="Clear value">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
+                  <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- EUR Row (Default 3) -->
+          <div class="currency-row" id="row-3" data-index="3">
+            <button class="currency-selector" data-index="3" aria-label="Change EUR currency">
+              <div class="selector-content-left">
+                <img class="currency-flag" src="https://flagcdn.com/w40/eu.png" alt="Euro flag" />
+                <span class="currency-code">EUR</span>
+              </div>
+              <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                width="14" height="14">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div class="input-wrapper">
+              <input type="text" class="currency-input" id="input-3" data-index="3" placeholder="0.00" inputmode="none"
+                autocomplete="off" />
+              <button class="clear-input-btn" data-index="3" aria-label="Clear value">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
+                  <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- JPY Row (Default 4) -->
+          <div class="currency-row" id="row-4" data-index="4">
+            <button class="currency-selector" data-index="4" aria-label="Change JPY currency">
+              <div class="selector-content-left">
+                <img class="currency-flag" src="https://flagcdn.com/w40/jp.png" alt="Japan flag" />
+                <span class="currency-code">JPY</span>
+              </div>
+              <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                width="14" height="14">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div class="input-wrapper">
+              <input type="text" class="currency-input" id="input-4" data-index="4" placeholder="0.00" inputmode="none"
+                autocomplete="off" />
+              <button class="clear-input-btn" data-index="4" aria-label="Clear value">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
+                  <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Custom Integrated Numerical Keypad -->
+      <section class="keypad-container" aria-label="Numerical Input Keypad">
+        <div class="keypad-grid">
+          <button class="key-btn" data-val="1">1</button>
+          <button class="key-btn" data-val="2">2</button>
+          <button class="key-btn" data-val="3">3</button>
+          <button class="key-btn" data-val="4">4</button>
+          <button class="key-btn" data-val="5">5</button>
+          <button class="key-btn" data-val="6">6</button>
+          <button class="key-btn" data-val="7">7</button>
+          <button class="key-btn" data-val="8">8</button>
+          <button class="key-btn" data-val="9">9</button>
+          <button class="key-btn dot-key" data-val=".">.</button>
+          <button class="key-btn" data-val="0">0</button>
+          <button class="key-btn backspace-key" data-val="backspace" aria-label="Backspace">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="24"
+              height="24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414A2 2 0 0010.828 19H20a2 2 0 002-2V7a2 2 0 00-2-2h-9.172a2 2 0 00-1.414.586L3 12z" />
+            </svg>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Currency Picker Dialog Overlay -->
+    <!-- MANDATORY: closedby="any" enables light-dismiss (clicking the backdrop to close) natively -->
+    <dialog id="currencyModal" closedby="any" aria-labelledby="modalTitle">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <header class="modal-header">
+          <h2 id="modalTitle">Select Currency</h2>
+          <button id="closeModalBtn" class="close-modal-btn" aria-label="Close dialog">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="24"
+              height="24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </header>
+
+        <!-- Search Bar Section -->
+        <div class="search-wrapper">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" width="20" height="20">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input type="text" id="currencySearch" placeholder="Search currency code or name..." autocomplete="off" />
+          <button id="clearSearchBtn" class="clear-search-btn" aria-label="Clear search text">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+              <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Scrollable Currencies List -->
+        <div class="currency-list" id="currencyList" role="listbox" aria-label="Available currencies">
+          <!-- Will be populated dynamically by JavaScript -->
+        </div>
+      </div>
+    </dialog>
+  </div>
+
+  <!-- Client Controller Module -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
