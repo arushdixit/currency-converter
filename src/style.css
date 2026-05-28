@@ -111,7 +111,7 @@ input, textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 20px 16px;
+  padding: clamp(12px, 2dvh, 24px) 20px clamp(8px, 1.5dvh, 16px);
   border-bottom: 1px solid var(--border-translucent);
 }
 
@@ -142,7 +142,7 @@ input, textarea {
 
 .logo-area h1 {
   font-family: var(--font-display);
-  font-size: 24px;
+  font-size: clamp(18px, 2.8dvh, 24px);
   font-weight: 600;
   letter-spacing: -0.5px;
   background: var(--accent-glow);
@@ -217,8 +217,8 @@ input, textarea {
 
 /* 5. Currency Rows */
 .currency-rows-container {
-  flex: 0 0 auto; /* Do not stretch rows container, keeps spacing tight */
-  padding: 16px 16px 8px;
+  flex: 1 1 auto; /* Let rows flex and adapt to the viewport space */
+  padding: clamp(8px, 1.5dvh, 16px) 16px clamp(4px, 1dvh, 8px);
   /* Scrollbar removal inside list rows */
   scrollbar-width: none;
 }
@@ -229,7 +229,7 @@ input, textarea {
 .currency-rows {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: clamp(6px, 1dvh, 12px);
 }
 
 .currency-row {
@@ -238,9 +238,9 @@ input, textarea {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--border-translucent);
-  border-radius: 20px;
+  border-radius: clamp(12px, 2dvh, 20px);
   padding: 8px 12px 8px 14px;
-  height: 76px;
+  height: clamp(52px, 7.8dvh, 74px);
   transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
@@ -424,17 +424,17 @@ input, textarea {
 .keypad-container {
   background-color: rgba(2, 6, 17, 0.45);
   border-top: 1px solid var(--border-translucent);
-  padding: 16px 20px 24px;
+  padding: clamp(8px, 1.5dvh, 16px) 20px clamp(12px, 2.5dvh, 24px);
   display: flex;
   flex-direction: column;
-  flex: 1; /* Stretch keypad container to occupy the rest of the screen */
-  min-height: 280px; /* Safe minimum height */
+  flex: 1.1 1 auto; /* Stretch keypad container proportionally */
+  min-height: 0; /* Allow the keypad to shrink on tiny screens */
 }
 
 /* Ensure padding matches device safe areas on modern iPhones */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   .keypad-container {
-    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    padding-bottom: calc(clamp(8px, 1.5dvh, 16px) + env(safe-area-inset-bottom));
   }
 }
 
@@ -442,24 +442,23 @@ input, textarea {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(4, 1fr); /* 4 rows of keys */
-  gap: 10px;
+  gap: clamp(6px, 1.2dvh, 10px);
   max-width: 360px;
   width: 100%;
   margin: 0 auto;
-  flex: 1; /* Stretch grid to fill container height */
+  flex: 1; /* Stretch grid to fill container height dynamically */
 }
 
 .key-btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  min-height: 52px;
+  height: 100%; /* Auto-fits cell height */
   background-color: var(--bg-key);
   border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 16px;
+  border-radius: clamp(10px, 1.8dvh, 16px);
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: clamp(16px, 2.5dvh, 22px);
   font-weight: 500;
   color: var(--text-primary);
   cursor: pointer;
