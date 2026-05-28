@@ -3,7 +3,7 @@ const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/favicon.svg'
+  '/favicon.png'
 ];
 
 // Install Event - Pre-cache core static assets
@@ -17,11 +17,12 @@ self.addEventListener('install', (event) => {
 
 // Activate Event - Clean up old caches
 self.addEventListener('activate', (event) => {
+  const cacheWhitelist = [CACHE_NAME, 'converter-flags-cache'];
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
-          if (key !== CACHE_NAME) {
+          if (!cacheWhitelist.includes(key)) {
             return caches.delete(key);
           }
         })
@@ -32,15 +33,48 @@ self.addEventListener('activate', (event) => {
 
 // Fetch Event - Dynamic caching strategy
 self.addEventListener('fetch', (event) => {
-  // Only handle standard http/https GET requests
-  if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
+  // Only handle standard GET requests
+  if (event.request.method !== 'GET') {
     return;
   }
 
+  const requestUrl = event.request.url;
+  const isSelfOrigin = requestUrl.startsWith(self.location.origin);
+  const isFlagCDN = requestUrl.startsWith('https://flagcdn.com');
+
+  if (!isSelfOrigin && !isFlagCDN) {
+    return;
+  }
+
+  // Cache-First strategy for Flag CDN images (since flag designs never change)
+  if (isFlagCDN) {
+    event.respondWith(
+      caches.open('converter-flags-cache').then((cache) => {
+        return cache.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+
+          return fetch(event.request).then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              cache.put(event.request, networkResponse.clone());
+            }
+            return networkResponse;
+          }).catch(() => {
+            // Offline fallback for flags
+            return new Response('', { status: 408, statusText: 'Network Error' });
+          });
+        });
+      })
+    );
+    return;
+  }
+
+  // Stale-While-Revalidate caching strategy for static application assets
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // Fetch fresh copy in the background to update cache (Stale-While-Revalidate)
+        // Fetch fresh copy in the background to update cache
         fetch(event.request).then((networkResponse) => {
           if (networkResponse.status === 200) {
             caches.open(CACHE_NAME).then((cache) => {
@@ -67,7 +101,7 @@ self.addEventListener('fetch', (event) => {
         return networkResponse;
       }).catch(() => {
         // Fallback for document requests when offline
-        if (event.request.headers.get('accept').includes('text/html')) {
+        if (event.request.headers.get('accept')?.includes('text/html')) {
           return caches.match('/index.html');
         }
       });

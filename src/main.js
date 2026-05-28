@@ -2,31 +2,14 @@ import './style.css';
 import { getCurrencyInfo, CURRENCY_MAP } from './currencyData.js';
 
 // ==========================================================================
-// 1. Hardcoded Modern Offline Fallback Rates (Base: USD)
-// ==========================================================================
-const OFFLINE_FALLBACK_RATES = {
-  USD: 1.0,
-  AED: 3.6725,
-  INR: 83.35,
-  EUR: 0.9220,
-  JPY: 156.80,
-  GBP: 0.7850,
-  AUD: 1.5050,
-  CAD: 1.3650,
-  CHF: 0.9080,
-  CNY: 7.2450,
-  SGD: 1.3480
-};
-
-// ==========================================================================
-// 2. Application State
+// 1. Application State
 // ==========================================================================
 const state = {
   // Ordered currency list (5 rows). AED, INR, USD, EUR, JPY by default
   currencies: ['AED', 'INR', 'USD', 'EUR', 'JPY'],
 
-  // Loaded exchange rates relative to USD base
-  rates: { ...OFFLINE_FALLBACK_RATES },
+  // Loaded exchange rates relative to USD base (will be fetched or loaded from cache)
+  rates: {},
 
   // Row currently being focused (index 0 to 4)
   activeRowIndex: 0,
@@ -40,6 +23,14 @@ const state = {
   // Timestamp of the last successful rates sync
   lastFetched: null
 };
+
+// ==========================================================================
+// 2.5. Global Shared Formatter (Created once to prevent GC and CPU cycles on keypress)
+// ==========================================================================
+const thousandFormatter = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+});
 
 // ==========================================================================
 // 3. DOM Cache Elements
@@ -66,7 +57,7 @@ function cacheDomElements() {
 // Fetches rates in the background, updates local cache, and triggers conversions
 async function fetchLatestRates(isManual = false) {
   if (refreshBtn) refreshBtn.classList.add('loading');
-  if (lastUpdatedText && !isManual) lastUpdatedText.textContent = 'Syncing rates...';
+  if (lastUpdatedText && !isManual) lastUpdatedText.textContent = 'Syncing...';
 
   try {
     const response = await fetch('https://open.er-api.com/v6/latest/USD');
@@ -91,7 +82,7 @@ async function fetchLatestRates(isManual = false) {
     if (lastUpdatedText) {
       lastUpdatedText.textContent = state.lastFetched
         ? `Offline. Cached ${getRelativeTimeString(state.lastFetched)}`
-        : 'Offline. Using fallback rates';
+        : 'Offline. Connection failed';
     }
   } finally {
     if (refreshBtn) refreshBtn.classList.remove('loading');
@@ -145,7 +136,7 @@ function getRelativeTimeString(timestamp) {
   const diffMin = Math.floor(diffSec / 60);
   const diffHr = Math.floor(diffMin / 60);
 
-  if (diffSec < 10) return 'just now';
+  if (diffSec < 10) return 'now';
   if (diffSec < 60) return `${diffSec}s ago`;
   if (diffMin < 60) return `${diffMin}m ago`;
   if (diffHr < 24) return `${diffHr}h ago`;
@@ -169,7 +160,7 @@ function updateTimestampUI(justUpdated = false) {
   } else if (state.lastFetched) {
     lastUpdatedText.textContent = `Synced ${getRelativeTimeString(state.lastFetched)}`;
   } else {
-    lastUpdatedText.textContent = 'Using backup rates';
+    lastUpdatedText.textContent = 'Loading...';
   }
 }
 
@@ -189,12 +180,6 @@ setInterval(() => {
 function recalculateAllFromActive() {
   const activeCode = state.currencies.at(state.activeRowIndex);
   const activeRate = Reflect.get(state.rates, activeCode);
-
-  // Formatters
-  const thousandFormatter = new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
 
   // Strip commas for calculations
   const rawNumString = state.inputValueAccumulator.replace(/,/g, '');
@@ -222,7 +207,7 @@ function recalculateAllFromActive() {
 
     const targetRate = Reflect.get(state.rates, code);
     if (!activeRate || !targetRate) {
-      inputElement.value = 'Error';
+      inputElement.value = Object.keys(state.rates).length === 0 ? '' : 'Error';
       return;
     }
 
@@ -320,35 +305,7 @@ function setActiveRow(index) {
   recalculateAllFromActive();
 }
 
-// Intercepts physical keyboard inputs on desktops for cohesive typing controls
-function handleDesktopKeyboard(event) {
-  // If search picker input is focused, let it process naturally
-  if (document.activeElement === currencySearch) return;
 
-  const key = event.key;
-
-  if (key >= '0' && key <= '9') {
-    event.preventDefault();
-    handleKeyInput(key);
-  } else if (key === '.') {
-    event.preventDefault();
-    handleKeyInput('.');
-  } else if (key === 'Backspace') {
-    event.preventDefault();
-    handleKeyInput('backspace');
-  } else if (key === 'Escape' || key === 'Delete') {
-    event.preventDefault();
-    handleKeyInput('clear');
-  } else if (key === 'ArrowUp') {
-    event.preventDefault();
-    const prev = (state.activeRowIndex - 1 + 5) % 5;
-    setActiveRow(prev);
-  } else if (key === 'ArrowDown') {
-    event.preventDefault();
-    const next = (state.activeRowIndex + 1) % 5;
-    setActiveRow(next);
-  }
-}
 
 
 // ==========================================================================
@@ -396,53 +353,22 @@ function openCurrencyPicker(rowIndex) {
   }
 }
 
-// Render search results scroll list
-function renderModalList(filterQueryText = '') {
+// Pre-renders the full search picker list exactly once on boot (Zero runtime DOM construction)
+function preRenderCurrencyList() {
   if (!currencyList) return;
   currencyList.innerHTML = '';
 
-  const query = filterQueryText.toLowerCase().trim();
   const allCodes = Object.keys(CURRENCY_MAP);
-
-  let matches = allCodes.filter(code => {
-    const details = Reflect.get(CURRENCY_MAP, code);
-    return code.toLowerCase().includes(query) || details.name.toLowerCase().includes(query);
-  });
-
-  if (matches.length === 0) {
-    const noResultsDiv = document.createElement('div');
-    noResultsDiv.className = 'no-results';
-
-    // Static HTML for the search error icon is safe since no variables are interpolated
-    noResultsDiv.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    `;
-
-    const messageSpan = document.createElement('span');
-    messageSpan.textContent = `No currencies match "${filterQueryText}"`;
-    noResultsDiv.appendChild(messageSpan);
-
-    currencyList.appendChild(noResultsDiv);
-    return;
-  }
-
-  // Fragment for optimized bulk DOM injection
   const fragment = document.createDocumentFragment();
 
-  matches.forEach(code => {
+  allCodes.forEach(code => {
     const info = getCurrencyInfo(code);
     const itemBtn = document.createElement('button');
     itemBtn.className = 'currency-item';
     itemBtn.type = 'button';
     itemBtn.role = 'option';
-
-    // Highlight if this currency is currently active in the selected row
-    const currentCodeInRow = state.currencies.at(state.modalTargetRowIndex);
-    if (code === currentCodeInRow) {
-      itemBtn.classList.add('active-choice');
-    }
+    itemBtn.dataset.code = code.toLowerCase();
+    itemBtn.dataset.name = info.name.toLowerCase();
 
     // Build DOM structure dynamically and safely
     const flagImg = document.createElement('img');
@@ -473,6 +399,57 @@ function renderModalList(filterQueryText = '') {
   });
 
   currencyList.appendChild(fragment);
+}
+
+// Render search results scroll list via high-speed display toggling
+function renderModalList(filterQueryText = '') {
+  if (!currencyList) return;
+
+  const query = filterQueryText.toLowerCase().trim();
+  let hasMatches = false;
+  const currentCodeInRow = state.currencies.at(state.modalTargetRowIndex);
+
+  const items = currencyList.querySelectorAll('.currency-item');
+  items.forEach(item => {
+    const code = item.dataset.code;
+    const name = item.dataset.name;
+    const isMatch = code.includes(query) || name.includes(query);
+
+    if (isMatch) {
+      item.style.display = 'flex';
+      hasMatches = true;
+
+      // Update choice state highlighting
+      if (code.toUpperCase() === currentCodeInRow) {
+        item.classList.add('active-choice');
+      } else {
+        item.classList.remove('active-choice');
+      }
+    } else {
+      item.style.display = 'none';
+    }
+  });
+
+  // Handle the 'no-results' feedback container
+  let noResultsDiv = currencyList.querySelector('.no-results');
+  if (!hasMatches) {
+    if (!noResultsDiv) {
+      noResultsDiv = document.createElement('div');
+      noResultsDiv.className = 'no-results';
+      noResultsDiv.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span></span>
+      `;
+      currencyList.appendChild(noResultsDiv);
+    }
+    const messageSpan = noResultsDiv.querySelector('span');
+    if (messageSpan) messageSpan.textContent = `No currencies match "${filterQueryText}"`;
+    noResultsDiv.style.display = 'flex';
+  } else if (noResultsDiv) {
+    noResultsDiv.style.display = 'none';
+  }
 }
 
 function selectCurrency(code) {
@@ -553,8 +530,7 @@ function bindAppEvents() {
     }
   });
 
-  // Global desktop typing listeners
-  document.addEventListener('keydown', handleDesktopKeyboard);
+
 
   // Search Modal bindings
   closeModalBtn?.addEventListener('click', () => currencyModal?.close());
@@ -594,6 +570,7 @@ function bootApp() {
   loadStoredData();
   cacheDomElements();
   bindAppEvents();
+  preRenderCurrencyList();
 
   // Render row names & flags
   renderRowsMetadata();

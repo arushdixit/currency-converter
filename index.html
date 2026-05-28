@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
   <!-- SEO and Meta Tags -->
@@ -11,9 +11,10 @@
   <meta name="description"
     content="A beautiful, fluid, dark-mode currency converter with a custom in-app keypad, real-time rates auto-updates, and advanced instant search." />
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts & DNS Preconnects -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://flagcdn.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
     rel="stylesheet">
@@ -26,7 +27,7 @@
   <meta name="theme-color" content="#060913" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <link rel="apple-touch-icon" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
 </head>
 
 <body>
@@ -73,10 +74,8 @@
             <path d="M 17.2 10.8 C 17.2 10 17.8 9.5 18.6 9.5 C 19.4 9.5 20 10 20 10.8 C 20 11.6 19.4 12 18.6 12.2 C 17.8 12.4 17.2 12.8 17.2 13.6 C 17.2 14.4 17.8 14.9 18.6 14.9 C 19.4 14.9 20 14.4 20 13.6" 
                   stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
                   
-            <!-- Euro Glyph (€) -->
-            <path d="M 15 17.8 A 2.2 2.2 0 1 0 15 21.2" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none" />
-            <path d="M 12 19 H 14.5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" />
-            <path d="M 12 20 H 14.5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" />
+            <!-- Dirham Glyph (Official UAE Design System AED symbol) -->
+            <image href="https://designsystem.gov.ae/assets/generic/aed-symbol.png" x="10" y="16.8" width="6" height="6" />
           </svg>
           <h1>Converter</h1>
         </div>

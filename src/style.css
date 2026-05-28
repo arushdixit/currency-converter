@@ -290,6 +290,11 @@ input, textarea {
   transition: var(--transition-fast);
 }
 
+/* Prevent child items from hijacking touch events on mobile touchscreens */
+.currency-selector * {
+  pointer-events: none;
+}
+
 .currency-info {
   display: flex;
   flex-direction: column;
@@ -497,25 +502,14 @@ input, textarea {
 
 /* 7. Dialog / Modal (Currency Selection) */
 dialog#currencyModal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.95);
-  background-color: #0c1222;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 28px;
-  width: 90%;
+  /* Let it use native centering, but remove all custom overrides that break WebKit */
+  background: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
   max-width: 390px;
-  max-height: 80vh;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 242, 254, 0.05);
-  overflow: hidden;
-  color: var(--text-primary);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: all var(--transition-normal);
-  display: flex;
-  flex-direction: column;
+  width: 90%;
+  overflow: visible; /* Let container div handle bounds */
 }
 
 /* Backdrop Filter for Premium Blur */
@@ -527,14 +521,6 @@ dialog#currencyModal::backdrop {
   transition: opacity var(--transition-normal);
 }
 
-/* Opened Modal Animation States */
-dialog#currencyModal[open] {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
 dialog#currencyModal[open]::backdrop {
   opacity: 1;
 }
@@ -544,6 +530,23 @@ dialog#currencyModal[open]::backdrop {
   flex-direction: column;
   height: 100%;
   max-height: 80vh; /* Match modal height bounds */
+  background-color: #0c1222;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 242, 254, 0.05);
+  overflow: hidden;
+  color: var(--text-primary);
+  
+  /* Smooth entry/exit animations on wrapper content instead of dialog element */
+  transform: scale(0.95);
+  opacity: 0;
+  transition: transform var(--transition-normal), opacity var(--transition-normal);
+}
+
+/* Opened Modal Animation States */
+dialog#currencyModal[open] .modal-content {
+  transform: scale(1);
+  opacity: 1;
 }
 
 .modal-header {

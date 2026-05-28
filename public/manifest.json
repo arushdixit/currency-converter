@@ -4,20 +4,20 @@
   "description": "A beautiful, fluid, dark-mode currency converter that works instantly offline.",
   "icons": [
     {
-      "src": "/favicon.svg",
-      "type": "image/svg+xml",
-      "sizes": "any",
+      "src": "/favicon.png",
+      "type": "image/png",
+      "sizes": "512x512",
       "purpose": "any"
     },
     {
-      "src": "/favicon.svg",
-      "type": "image/svg+xml",
+      "src": "/favicon.png",
+      "type": "image/png",
       "sizes": "192x192",
       "purpose": "maskable"
     },
     {
-      "src": "/favicon.svg",
-      "type": "image/svg+xml",
+      "src": "/favicon.png",
+      "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
     }
