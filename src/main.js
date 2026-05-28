@@ -600,11 +600,22 @@ if (document.readyState === 'interactive' || document.readyState === 'complete')
   bootApp();
 }
 
-// Register Service Worker for PWA installation support
+// Register Service Worker in production only (avoids Vite dev server caching/HMR conflicts)
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then((reg) => console.log('Service Worker registered successfully:', reg.scope))
-      .catch((err) => console.error('Service Worker registration failed:', err));
-  });
+  if (import.meta.env.PROD) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then((reg) => console.log('Service Worker registered successfully:', reg.scope))
+        .catch((err) => console.error('Service Worker registration failed:', err));
+    });
+  } else if (import.meta.env.DEV) {
+    // Proactively clean up any active service worker in dev mode
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (const registration of registrations) {
+        registration.unregister().then((success) => {
+          if (success) console.log('Dev cleanup: Unregistered active service worker.');
+        });
+      }
+    });
+  }
 }
