@@ -46,10 +46,14 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache-First strategy for Flag CDN images (since flag designs never change)
-  if (isFlagCDN) {
+  // Identify uniquely hashed Vite production bundles (which are completely immutable)
+  const isImmutableAsset = isSelfOrigin && requestUrl.includes('/assets/') && (requestUrl.endsWith('.js') || requestUrl.endsWith('.css'));
+
+  // Cache-First strategy for Flag CDN images and immutable production assets
+  if (isFlagCDN || isImmutableAsset) {
+    const cacheName = isFlagCDN ? 'converter-flags-cache' : CACHE_NAME;
     event.respondWith(
-      caches.open('converter-flags-cache').then((cache) => {
+      caches.open(cacheName).then((cache) => {
         return cache.match(event.request).then((cachedResponse) => {
           if (cachedResponse) {
             return cachedResponse;
@@ -61,8 +65,9 @@ self.addEventListener('fetch', (event) => {
             }
             return networkResponse;
           }).catch(() => {
-            // Offline fallback for flags
-            return new Response('', { status: 408, statusText: 'Network Error' });
+            if (isFlagCDN) {
+              return new Response('', { status: 408, statusText: 'Network Error' });
+            }
           });
         });
       })

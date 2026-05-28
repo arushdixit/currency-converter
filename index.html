@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://flagcdn.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
+    rel="stylesheet" media="print" onload="this.media='all'">
 
   <!-- Core Application Stylesheet -->
   <link rel="stylesheet" href="/src/style.css" />
@@ -39,44 +39,7 @@
       <header class="app-header">
         <div class="logo-area">
           <div class="logo-glow"></div>
-          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="28" height="28">
-            <defs>
-              <linearGradient id="header-logo-grad-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#22d3ee" />
-                <stop offset="100%" stop-color="#06b6d4" />
-              </linearGradient>
-              <linearGradient id="header-logo-grad-purple" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#c084fc" />
-                <stop offset="100%" stop-color="#8b5cf6" />
-              </linearGradient>
-            </defs>
-            
-            <!-- Orbiting Outer Exchange Loop -->
-            <!-- Top Right Arc -->
-            <path d="M 6 16 A 10 10 0 0 1 24.5 9.5" fill="none" stroke="url(#header-logo-grad-cyan)" stroke-width="2" stroke-linecap="round" />
-            <path d="M 20.5 9.5 H 24.5 V 13.5" fill="none" stroke="url(#header-logo-grad-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            
-            <!-- Bottom Left Arc -->
-            <path d="M 26 16 A 10 10 0 0 1 7.5 22.5" fill="none" stroke="url(#header-logo-grad-purple)" stroke-width="2" stroke-linecap="round" />
-            <path d="M 11.5 22.5 H 7.5 V 18.5" fill="none" stroke="url(#header-logo-grad-purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            
-            <!-- Split Center Circular Currency Shield -->
-            <g transform="rotate(-45, 16, 16)">
-              <!-- Top-Right Half (Cyan) -->
-              <path d="M 8.5 15 A 7.5 7.5 0 0 1 23.5 15 Z" fill="url(#header-logo-grad-cyan)" />
-              <!-- Bottom-Left Half (Purple) -->
-              <path d="M 23.5 17 A 7.5 7.5 0 0 1 8.5 17 Z" fill="url(#header-logo-grad-purple)" />
-            </g>
-            
-            <!-- Upright Currency Glyphs in Center -->
-            <!-- Dollar Glyph ($) -->
-            <path d="M 19 9 V 15.5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none" />
-            <path d="M 17.2 10.8 C 17.2 10 17.8 9.5 18.6 9.5 C 19.4 9.5 20 10 20 10.8 C 20 11.6 19.4 12 18.6 12.2 C 17.8 12.4 17.2 12.8 17.2 13.6 C 17.2 14.4 17.8 14.9 18.6 14.9 C 19.4 14.9 20 14.4 20 13.6" 
-                  stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-                  
-            <!-- Dirham Glyph (Official UAE Design System AED symbol) -->
-            <image href="https://designsystem.gov.ae/assets/generic/aed-symbol.png" x="10" y="16.8" width="6" height="6" />
-          </svg>
+          <img class="logo-icon" src="/favicon.png" alt="Currency Converter logo" style="border-radius: 6px;" />
           <h1>Converter</h1>
         </div>
 
@@ -100,7 +63,7 @@
           <div class="currency-row" id="row-0" data-index="0">
             <button class="currency-selector" data-index="0" aria-label="Change AED currency">
               <div class="selector-content-left">
-                <img class="currency-flag" src="https://flagcdn.com/w40/ae.png" alt="UAE flag" />
+                <img class="currency-flag" src="https://flagcdn.com/w40/ae.png" alt="UAE flag" width="24" height="18" />
                 <span class="currency-code">AED</span>
               </div>
               <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -127,7 +90,7 @@
           <div class="currency-row" id="row-1" data-index="1">
             <button class="currency-selector" data-index="1" aria-label="Change INR currency">
               <div class="selector-content-left">
-                <img class="currency-flag" src="https://flagcdn.com/w40/in.png" alt="India flag" />
+                <img class="currency-flag" src="https://flagcdn.com/w40/in.png" alt="India flag" width="24" height="18" />
                 <span class="currency-code">INR</span>
               </div>
               <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -154,7 +117,7 @@
           <div class="currency-row" id="row-2" data-index="2">
             <button class="currency-selector" data-index="2" aria-label="Change USD currency">
               <div class="selector-content-left">
-                <img class="currency-flag" src="https://flagcdn.com/w40/us.png" alt="United States flag" />
+                <img class="currency-flag" src="https://flagcdn.com/w40/us.png" alt="United States flag" width="24" height="18" />
                 <span class="currency-code">USD</span>
               </div>
               <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -181,7 +144,7 @@
           <div class="currency-row" id="row-3" data-index="3">
             <button class="currency-selector" data-index="3" aria-label="Change EUR currency">
               <div class="selector-content-left">
-                <img class="currency-flag" src="https://flagcdn.com/w40/eu.png" alt="Euro flag" />
+                <img class="currency-flag" src="https://flagcdn.com/w40/eu.png" alt="Euro flag" width="24" height="18" />
                 <span class="currency-code">EUR</span>
               </div>
               <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -208,7 +171,7 @@
           <div class="currency-row" id="row-4" data-index="4">
             <button class="currency-selector" data-index="4" aria-label="Change JPY currency">
               <div class="selector-content-left">
-                <img class="currency-flag" src="https://flagcdn.com/w40/jp.png" alt="Japan flag" />
+                <img class="currency-flag" src="https://flagcdn.com/w40/jp.png" alt="Japan flag" width="24" height="18" />
                 <span class="currency-code">JPY</span>
               </div>
               <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
