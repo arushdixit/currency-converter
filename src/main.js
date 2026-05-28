@@ -348,6 +348,15 @@ function openCurrencyPicker(rowIndex) {
   if (currencySearch) currencySearch.value = '';
   if (clearSearchBtn) clearSearchBtn.style.display = 'none';
 
+  // High-performance dynamic lazy loading of picker flags only when opened
+  if (currencyList) {
+    const lazyFlags = currencyList.querySelectorAll('img[data-src]');
+    lazyFlags.forEach(img => {
+      img.src = img.dataset.src;
+      img.removeAttribute('data-src');
+    });
+  }
+
   renderModalList('');
 
   if (currencyModal) {
@@ -374,12 +383,11 @@ function preRenderCurrencyList() {
     itemBtn.dataset.code = code.toLowerCase();
     itemBtn.dataset.name = info.name.toLowerCase();
 
-    // Build DOM structure dynamically and safely
+    // Build DOM structure dynamically and safely (lazy load src on modal open)
     const flagImg = document.createElement('img');
     flagImg.className = 'item-flag';
-    flagImg.src = info.flagUrl;
+    flagImg.dataset.src = info.flagUrl;
     flagImg.alt = `${info.name} flag`;
-    flagImg.loading = 'lazy';
 
     const detailsDiv = document.createElement('div');
     detailsDiv.className = 'item-details';

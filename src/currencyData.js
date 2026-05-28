@@ -4,7 +4,6 @@ export const CURRENCY_MAP = {
   AFN: { name: "Afghan Afghani", country: "af" },
   ALL: { name: "Albanian Lek", country: "al" },
   AMD: { name: "Armenian Dram", country: "am" },
-  ANG: { name: "Netherlands Antillean Guilder", country: "an" },
   AOA: { name: "Angolan Kwanza", country: "ao" },
   ARS: { name: "Argentine Peso", country: "ar" },
   AUD: { name: "Australian Dollar", country: "au" },

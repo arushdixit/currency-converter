@@ -502,13 +502,18 @@ input, textarea {
 
 /* 7. Dialog / Modal (Currency Selection) */
 dialog#currencyModal {
-  /* Let it use native centering, but remove all custom overrides that break WebKit */
+  /* High-performance standard native centering */
+  position: fixed;
+  inset: 0;
+  margin: auto;
   background: transparent;
   border: none;
   padding: 0;
   outline: none;
   max-width: 390px;
   width: 90%;
+  height: fit-content;
+  max-height: 80vh;
   overflow: visible; /* Let container div handle bounds */
 }
 
