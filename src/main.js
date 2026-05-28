@@ -1,9 +1,5 @@
 import './style.css';
 import { getCurrencyInfo, CURRENCY_MAP } from './currencyData.js';
-import { inject } from '@vercel/analytics';
-
-// Initialize Vercel Web Analytics
-inject();
 
 // ==========================================================================
 // 1. Application State
